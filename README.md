@@ -29,6 +29,11 @@ Agent Fabric maps directly onto MuleSoft’s classic 3-tier API-Led Architecture
 |Custom logs + CloudWatch |	Agent Visualizer + Anypoint Monitoring |	Both capture latency, errors, and request traces. | Agent Visualizer adds a live visual map of agent interactions — not just logs, but topology and decision paths.|
 |Flow config (JSON/YAML) |	agent-network.yaml |	Both use a declarative config to define what executes and in what order. | Agent Fabric's YAML is platform-agnostic. It decouples the agent definition from the runtime — any agent from any platform can be referenced.|
 
+**The conceptual shift: deterministic flows to probabilistic agent networks**
+
+Our custom iPaaS is a deterministic system a flow config defines a fixed sequence with optional dynamic routing based component "output.checks" or what "Route" component returns. Validate -> Enrich -> Transform -> Route -> Operate. The VETRO chain always runs in a known order, with known adapters, producing known output shapes.
+Agent Fabric orchestrator doesn't need to know the execution path upfront. The Agent broker receives intent, reasons about it using an LLM, then dynamically selects which registered agents and tools to invoke. But it requires governance which is where Flex Gateway and Agent Governance come in to compensate for the loss of determinism. 
+
 ---
 
 ## 2. Orchestration & Guided Determinism
@@ -52,8 +57,10 @@ Create a MuleSoft Anypoint Platform account.
 2. **Install Git:** Required by ACB background scripts to clone asset templates from Anypoint Exchange.
 3. **Install Node.js (v20+ LTS):** Vital to host the background `@mulesoft/mcp-server` that powers the **MuleSoft Vibes** AI development assistant.
 4. **Verify System Paths:** Ensure both `git` and `npm` are accessible globally via your system environment variables.
-5. **Install VS Code Extension Pack:** Add the *Anypoint* extension pack (contains 8 extensions) **after** the dependencies above are fully installed.
-6. **Authenticate Cloud Platform:** Connect ACB to an active Anypoint Platform account to map your project's `exchange.json` to an active Organization ID.
+5. **Java 17 (Temurin/Corretto):** Required to run Mule runtimes locally. 
+6. **Install VS Code Extension Pack:** Add the *Anypoint* extension pack (contains 8 extensions) **after** the dependencies above are fully installed. This includes Anypoint Code Builder - the IDE where you can create, build, publish and deploy Agent Fabric projects.
+7. **Anypoint CLI v4:** Command-line tool for publishing and deploying agent network assets. Install via npm: npm install -g Anypoint-cli-v4
+8. **Authenticate Cloud Platform:** Connect ACB to an active Anypoint Platform account to map your project's `exchange.json` to an active Organization ID.
 
 ### Environment Verification Screenshots
 
